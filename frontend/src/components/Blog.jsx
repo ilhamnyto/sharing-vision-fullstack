@@ -19,9 +19,11 @@ export default function Blog() {
           } else if (data.meta.total % 5 == 0 && data.meta.total / 5 == 0) {
             totalPage = 1;
           }
-          console.log(totalPage);
           return { ...prev, totalPage: totalPage };
         });
+      })
+      .catch((err) => {
+        console.error(err);
       });
   }, []);
 

@@ -4,7 +4,7 @@
 
 1. Go to backend folder
 ```bash
-cd /backend
+cd backend/
 ```
 
 2. Copy .env file
@@ -12,7 +12,7 @@ cd /backend
 cp .env.example .env
 ```
 
-3. Adjust your database credentials
+3. Adjust your database credentials in .env
 
 4. Run migration
 
@@ -42,7 +42,7 @@ http://localhost:8080
 1. Go to frontend folder
 
 ```bash
-cd /frontend
+cd frontend/
 ```
 
 2. Install package
