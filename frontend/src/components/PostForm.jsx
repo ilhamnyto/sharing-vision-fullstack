@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function PostForm() {
+export default function PostForm({ method }) {
+  const pathname = usePathname().split("/");
+
   const { toast } = useToast();
   const [data, setData] = useState({
     title: "",
@@ -12,6 +15,21 @@ export default function PostForm() {
     status: "draft",
     isLoading: false,
   });
+
+  useEffect(() => {
+    if (method == "PATCH") {
+      fetch(`http://localhost:8080/api/v1/article/${pathname[2]}`)
+        .then((res) => res.json())
+        .then((article) => {
+          setData({
+            title: article.data.title,
+            content: article.data.content,
+            category: article.data.category,
+            status: article.data.status,
+          });
+        });
+    }
+  }, []);
 
   const changeHandler = (e) => {
     setData((prev) => {
@@ -25,8 +43,16 @@ export default function PostForm() {
     });
 
     e.preventDefault();
-    fetch("http://localhost:8080/api/v1/article", {
-      method: "POST",
+    let url = "";
+
+    if (method == "PATCH") {
+      url = `http://localhost:8080/api/v1/article/${pathname[2]}`;
+    } else {
+      url = "http://localhost:8080/api/v1/article";
+    }
+
+    fetch(url, {
+      method: method,
       headers: {
         "Content-Type": "application/json",
       },
@@ -48,13 +74,15 @@ export default function PostForm() {
           description: data.message,
         });
 
-        setData({
-          title: "",
-          content: "",
-          category: "",
-          status: "draft",
-          loading: false,
-        });
+        if (method == "POST") {
+          setData({
+            title: "",
+            content: "",
+            category: "",
+            status: "draft",
+            loading: false,
+          });
+        }
       })
       .catch((error) => {
         console.error("There was a problem with your fetch operation:", error);
