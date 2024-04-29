@@ -122,7 +122,7 @@ func (a *ArticleHandler) GetArticleByID(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": article})
+	ctx.JSON(http.StatusOK, gin.H{"data": article})
 }
 
 func (a *ArticleHandler) CreateArticle(ctx *gin.Context) {
